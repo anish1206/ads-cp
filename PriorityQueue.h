@@ -3,14 +3,16 @@
 
 #include "PCB.h"
 
-typedef struct Node {
-    PCB* process;
-    int priority;
-    struct Node* next;
-} Node;
+#define MAX_QUEUE_SIZE 100
 
 typedef struct {
-    Node* front;
+    PCB* process;
+    int priority;
+} PQNode;
+
+typedef struct {
+    PQNode heap[MAX_QUEUE_SIZE];
+    int size;
 } PriorityQueue;
 
 PriorityQueue* create_priority_queue();
