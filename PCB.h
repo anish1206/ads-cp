@@ -9,6 +9,7 @@ typedef struct {
     char job_id[50];
     int burst_time;
     int memory_req;
+    int is_active;  // 1 = active, 0 = scheduled/removed
 } PCB;
 
 PCB* create_pcb(const char* id, int burst, int mem);
