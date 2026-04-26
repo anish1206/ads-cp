@@ -10,16 +10,19 @@ PriorityQueue* create_priority_queue() {
     return pq;
 }
 
-void swap_nodes(PQNode* a, PQNode* b) {
+void pq_swap_nodes(PQNode* a, PQNode* b) {
     PQNode temp = *a;
     *a = *b;
     *b = temp;
 }
 
 void enqueue(PriorityQueue* pq, PCB* p, int priority) {
-    if (!pq || !p) return;
+    if (!pq || !p) {
+        fprintf(stderr, "❌ Error: Invalid priority queue or process pointer\n");
+        return;
+    }
     if (pq->size >= MAX_QUEUE_SIZE) {
-        printf("Priority Queue is full\n");
+        fprintf(stderr, "❌ Error: Priority Queue is full (max: %d jobs)\n", MAX_QUEUE_SIZE);
         return;
     }
     
@@ -30,7 +33,7 @@ void enqueue(PriorityQueue* pq, PCB* p, int priority) {
     pq->size++;
 
     while (i > 0 && pq->heap[(i - 1) / 2].priority > pq->heap[i].priority) {
-        swap_nodes(&pq->heap[i], &pq->heap[(i - 1) / 2]);
+        pq_swap_nodes(&pq->heap[i], &pq->heap[(i - 1) / 2]);
         i = (i - 1) / 2;
     }
 }
@@ -59,7 +62,7 @@ PCB* dequeue(PriorityQueue* pq) {
         }
 
         if (pq->heap[i].priority > pq->heap[smallest].priority) {
-            swap_nodes(&pq->heap[i], &pq->heap[smallest]);
+            pq_swap_nodes(&pq->heap[i], &pq->heap[smallest]);
             i = smallest;
         } else {
             break;
