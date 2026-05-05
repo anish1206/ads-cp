@@ -4,9 +4,7 @@
 
 PriorityQueue* create_priority_queue() {
     PriorityQueue* pq = (PriorityQueue*)malloc(sizeof(PriorityQueue));
-    if (pq) {
-        pq->size = 0;
-    }
+    if (pq) pq->size = 0;
     return pq;
 }
 
@@ -18,11 +16,11 @@ void pq_swap_nodes(PQNode* a, PQNode* b) {
 
 void enqueue(PriorityQueue* pq, PCB* p, int priority) {
     if (!pq || !p) {
-        fprintf(stderr, "❌ Error: Invalid priority queue or process pointer\n");
+        fprintf(stderr, " Error: Invalid priority queue or process pointer\n");
         return;
     }
     if (pq->size >= MAX_QUEUE_SIZE) {
-        fprintf(stderr, "❌ Error: Priority Queue is full (max: %d jobs)\n", MAX_QUEUE_SIZE);
+        fprintf(stderr, " Error: Priority Queue is full (max: %d jobs)\n", MAX_QUEUE_SIZE);
         return;
     }
     
@@ -39,36 +37,21 @@ void enqueue(PriorityQueue* pq, PCB* p, int priority) {
 }
 
 PCB* dequeue(PriorityQueue* pq) {
-    if (!pq || pq->size == 0) {
-        return NULL;
-    }
-
+    if (!pq || pq->size == 0) return NULL;
     PCB* result = pq->heap[0].process;
-
-    // Replace root with last element
     pq->heap[0] = pq->heap[pq->size - 1];
     pq->size--;
-
     int i = 0;
-
-    // Trickle down
     while (2 * i + 1 < pq->size) {
         int left = 2 * i + 1;
         int right = 2 * i + 2;
-
         int smallest = left;
-        if (right < pq->size && pq->heap[right].priority < pq->heap[left].priority) {
-            smallest = right;
-        }
-
+        if (right < pq->size && pq->heap[right].priority < pq->heap[left].priority) smallest = right;
         if (pq->heap[i].priority > pq->heap[smallest].priority) {
             pq_swap_nodes(&pq->heap[i], &pq->heap[smallest]);
             i = smallest;
-        } else {
-            break;
-        }
+        } else break;
     }
-
     return result;
 }
 
@@ -82,7 +65,5 @@ int is_empty(PriorityQueue* pq) {
 }
 
 void destroy_priority_queue(PriorityQueue* pq) {
-    if (pq) {
-        free(pq);
-    }
+    if (pq) free(pq);
 }
